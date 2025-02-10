@@ -11,7 +11,7 @@ const HeroSection = () => {
           Discover flowers around you
         </h1>
         <p
-          className="text-[17px] mt-[5px] opacity-75 mb-[45px]"
+          className="text-[17px] mt-[5px] opacity-75 mb-[45px] text-white"
           style={{ fontFamily: "Playfair Display" }}
         >
           Explore between more than 8.427 sightings
