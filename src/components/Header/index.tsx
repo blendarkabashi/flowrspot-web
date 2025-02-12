@@ -3,7 +3,12 @@ import React from "react";
 import Container from "../Container";
 import Button from "../Button";
 
-const Header = () => {
+interface HeaderProps {
+  onOpenLogin: () => void;
+  onOpenRegister: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenLogin, onOpenRegister }) => {
   return (
     <div className="p-[20px] bg-white">
       <Container>
@@ -21,11 +26,11 @@ const Header = () => {
               <a href="#">Favorites</a>
             </li>
             <li>
-              <a className="text-[#DF9186]" href="#">
+              <a className="text-[#DF9186]" href="#" onClick={onOpenLogin}>
                 Login
               </a>
             </li>
-            <Button label="New Account" />
+            <Button rounded label="New Account" onClick={onOpenRegister} />
           </ul>
         </div>
       </Container>

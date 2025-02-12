@@ -1,10 +1,13 @@
 import React from "react";
+import Spinner from "../../../public/Icons/Spinner";
 
 interface ButtonProps {
   label: string;
   className?: string;
   onClick?: () => void;
-  variant?: "default" | "hoverGradient"; // New prop for switching styles
+  variant?: "default" | "hoverGradient";
+  rounded?: Boolean;
+  loading?: Boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -12,6 +15,8 @@ const Button: React.FC<ButtonProps> = ({
   className,
   onClick,
   variant = "default",
+  rounded,
+  loading,
 }) => {
   const defaultStyles = `px-[22px] py-[8px] bg-gradient-to-l from-[#EAA79E] to-[#ECBCB3] 
                           shadow-[0px_15px_20px_rgba(234,168,159,0.2)]`;
@@ -23,13 +28,14 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`cursor-pointer rounded-[50px] text-white 
+      className={`cursor-pointer text-white flex items-center justify-center
                   ${
                     variant === "hoverGradient" ? gradientStyles : defaultStyles
                   } 
-                  ${className}`}
+                  ${rounded ? "rounded-[50px]" : ""}
+                  ${className || ""}`}
     >
-      {label}
+      {loading ? <Spinner /> : label}
     </button>
   );
 };

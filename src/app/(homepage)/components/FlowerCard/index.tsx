@@ -31,6 +31,7 @@ const FlowerCard = ({ flower }: { flower: Flower }) => {
             {flower.latinName}
           </div>
           <Button
+            rounded
             variant="hoverGradient"
             label="127 sightings"
             className="text-[12px]"

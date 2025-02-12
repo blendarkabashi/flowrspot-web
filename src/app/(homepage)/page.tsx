@@ -1,7 +1,11 @@
+"use client";
 import Header from "@/components/Header";
 import Image from "next/image";
 import HeroSection from "./components/HeroSection";
 import FlowersGrid from "./components/FlowersGrid";
+import LoginModal from "./components/LoginModal";
+import { useState, useEffect } from "react";
+import RegisterModal from "./components/RegisterModal";
 
 export default function Home() {
   const flowers = [
@@ -69,11 +73,31 @@ export default function Home() {
       sightingsNum: 0,
     },
   ];
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+  useEffect(() => {
+    if (showLoginModal || showRegisterModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showLoginModal]);
+
   return (
-    <div className="">
-      <Header />
+    <div>
+      <Header
+        onOpenLogin={() => setShowLoginModal(true)}
+        onOpenRegister={() => setShowRegisterModal(true)}
+      />
       <HeroSection />
       <FlowersGrid flowers={flowers}></FlowersGrid>
+      {showLoginModal && (
+        <LoginModal closeModal={() => setShowLoginModal(false)} />
+      )}
+      {showRegisterModal && (
+        <RegisterModal closeModal={() => setShowRegisterModal(false)} />
+      )}
     </div>
   );
 }
