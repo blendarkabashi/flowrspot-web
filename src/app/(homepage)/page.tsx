@@ -6,6 +6,7 @@ import FlowersGrid from "./components/FlowersGrid";
 import LoginModal from "./components/LoginModal";
 import { useState, useEffect } from "react";
 import RegisterModal from "./components/RegisterModal";
+import ViewUserModal from "./components/ViewUserModal";
 
 export default function Home() {
   const flowers = [
@@ -75,9 +76,10 @@ export default function Home() {
   ];
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showViewUserModal, setShowViewUserModal] = useState(true);
 
   useEffect(() => {
-    if (showLoginModal || showRegisterModal) {
+    if (showLoginModal || showRegisterModal || showViewUserModal) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -97,6 +99,9 @@ export default function Home() {
       )}
       {showRegisterModal && (
         <RegisterModal closeModal={() => setShowRegisterModal(false)} />
+      )}
+      {showViewUserModal && (
+        <ViewUserModal closeModal={() => setShowViewUserModal(false)} />
       )}
     </div>
   );

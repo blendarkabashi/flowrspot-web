@@ -30,12 +30,14 @@ const FlowerCard = ({ flower }: { flower: Flower }) => {
           <div className="italic text-[12px] opacity-70 text-white mb-[20px]">
             {flower.latinName}
           </div>
-          <Button
-            rounded
-            variant="hoverGradient"
-            label="127 sightings"
-            className="text-[12px]"
-          />
+          <div className="flex items-center justify-center">
+            <Button
+              rounded
+              variant="hoverGradient"
+              label="127 sightings"
+              className="text-[12px]"
+            />
+          </div>
         </div>
       </div>
     </div>
