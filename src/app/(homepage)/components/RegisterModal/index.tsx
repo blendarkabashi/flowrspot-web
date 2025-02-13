@@ -1,20 +1,60 @@
+"use client";
+
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import React, { useState } from "react";
+import api from "@/lib/axiosInstance";
+import { useDispatch } from "react-redux";
+import { login } from "@/store/slices/authSlice";
+import axiosInstance from "@/lib/axiosInstance";
 
 interface RegisterModalProps {
   closeModal: () => void;
 }
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
+  const dispatch = useDispatch();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = () => {
-    // Call API or authentication function here
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.post("/account/register", {
+        email,
+        password,
+        firstName,
+        lastName,
+        dateOfBirth,
+      });
+
+      const userResponse = await axiosInstance.get("/account/me", {
+        headers: {
+          Authorization: `Bearer ${response.data.accessToken}`,
+        },
+      });
+
+      dispatch(
+        login({
+          user: userResponse.data,
+        })
+      );
+
+      console.log("Registration successful");
+      closeModal();
+    } catch (err) {
+      console.error("Registration failed:", err);
+      setError("Failed to create an account. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,8 +91,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
         className="mb-[10px]"
         label="Email Address"
         type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <Input
         id="password"
@@ -62,9 +102,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
       <Button
         onClick={handleSubmit}
         label="Create Account"
+        loading={loading}
         className="w-full py-[15px] rounded-[3px]"
       />
     </Modal>

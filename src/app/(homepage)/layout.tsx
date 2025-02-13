@@ -1,5 +1,6 @@
 import { Montserrat, Ubuntu } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/store/ReduxProvider";
 
 export const metadata = {
   title: "Next.js",
@@ -26,7 +27,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${ubuntu.variable}`}>
-      <body className="">{children}</body>
+      <ReduxProvider>
+        <body className="">{children}</body>
+      </ReduxProvider>
     </html>
   );
 }
