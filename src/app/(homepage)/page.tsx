@@ -101,7 +101,19 @@ export default function Home() {
         <RegisterModal closeModal={() => setShowRegisterModal(false)} />
       )}
       {showViewUserModal && (
-        <ViewUserModal closeModal={() => setShowViewUserModal(false)} />
+        <ViewUserModal
+          closeModal={() => setShowViewUserModal(false)}
+          user={{
+            id: "1",
+            email: "blendar.h.kabashi@gmail.com",
+            firstName: "Blendar",
+            lastName: "Kabashi",
+            dateOfBirth: "04 August, 1999",
+            sightingsNum: 24,
+            pictureUrl:
+              "https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.jpg?s=612x612&w=0&k=20&c=9zbG2-9fl741fbTWw5fNgcEEe4ll-JegrGlQQ6m54rg=",
+          }}
+        />
       )}
     </div>
   );
