@@ -5,7 +5,7 @@ const Container: React.FC<{ children: ReactNode; className?: string }> = ({
   className = "",
 }) => {
   return (
-    <div className={`max-w-[1180px] mx-auto ${className}`}>{children}</div>
+    <div className={`px-5 max-w-[1180px] mx-auto ${className}`}>{children}</div>
   );
 };
 
