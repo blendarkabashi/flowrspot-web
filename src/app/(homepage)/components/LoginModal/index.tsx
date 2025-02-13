@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
@@ -15,12 +17,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async () => {
     setLoading(true);
-    setError("");
+    setError(null);
 
     try {
       const response = await axiosInstance.post("/account/login", {
@@ -35,12 +37,20 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
       });
 
       dispatch(login({ user: userResponse.data }));
-
       console.log("Login Successful:", userResponse.data);
       closeModal();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Login Failed:", err);
-      setError((err as any)?.response?.data?.message || "Login failed");
+
+      if (err.response?.data?.code === "validation-exception") {
+        const validationErrors = Object.values(err.response.data.meta)
+          .map((field: any) => field.message)
+          .join("\n");
+
+        setError(validationErrors);
+      } else {
+        setError(err.response?.data?.message || "Login failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -73,7 +83,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
         label="Login to your account"
         className="w-full py-[15px] rounded-[3px]"
       />
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {error && (
+        <div className="text-red-500 mt-2 text-sm whitespace-pre-line">
+          {error}
+        </div>
+      )}
     </Modal>
   );
 };

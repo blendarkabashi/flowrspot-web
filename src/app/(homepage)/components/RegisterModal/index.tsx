@@ -22,6 +22,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
@@ -41,17 +42,17 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
         },
       });
 
-      dispatch(
-        login({
-          user: userResponse.data,
-        })
-      );
-
-      console.log("Registration successful");
+      dispatch(login({ user: userResponse.data }));
       closeModal();
-    } catch (err) {
-      console.error("Registration failed:", err);
-      setError("Failed to create an account. Please try again.");
+    } catch (err: any) {
+      if (err.response?.data?.code === "validation-exception") {
+        const validationErrors = Object.values(err.response.data.meta)
+          .map((field: any) => field.message)
+          .join("\n");
+        setError(validationErrors);
+      } else {
+        setError(err.response?.data?.message || "Failed to create an account.");
+      }
     } finally {
       setLoading(false);
     }
@@ -102,13 +103,17 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
       <Button
         onClick={handleSubmit}
         label="Create Account"
         loading={loading}
         className="w-full py-[15px] rounded-[3px]"
       />
+      {error && (
+        <div className="text-red-500 mt-2 text-sm whitespace-pre-line">
+          {error}
+        </div>
+      )}
     </Modal>
   );
 };
