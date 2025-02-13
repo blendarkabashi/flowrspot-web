@@ -1,82 +1,37 @@
 "use client";
+
 import Header from "@/components/Header";
-import Image from "next/image";
 import HeroSection from "./components/HeroSection";
 import FlowersGrid from "./components/FlowersGrid";
 import LoginModal from "./components/LoginModal";
-import { useState, useEffect } from "react";
 import RegisterModal from "./components/RegisterModal";
 import ViewUserModal from "./components/ViewUserModal";
+import { useState, useEffect } from "react";
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function Home() {
-  const flowers = [
-    {
-      id: "1",
-      name: "Flower 1",
-      latinName: "Latin Flower 1",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-    {
-      id: "2",
-      name: "Flower 2",
-      latinName: "Latin Flower 2",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-    {
-      id: "3",
-      name: "Flower 3",
-      latinName: "Latin Flower 3",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-    {
-      id: "4",
-      name: "Flower 4",
-      latinName: "Latin Flower 4",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-    {
-      id: "5",
-      name: "Flower 5",
-      latinName: "Latin Flower 5",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-    {
-      id: "6",
-      name: "Flower 6",
-      latinName: "Latin Flower 6",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-    {
-      id: "7",
-      name: "Flower 7",
-      latinName: "Latin Flower 7",
-      genus: "Genus 1",
-      pictureUrl: "/images/pl-image.png",
-      authorId: "Author",
-      sightingsNum: 0,
-    },
-  ];
+  const [flowers, setFlowers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showViewUserModal, setShowViewUserModal] = useState(false);
+
+  useEffect(() => {
+    const fetchFlowers = async () => {
+      try {
+        const response = await axiosInstance.get("/flowers");
+        setFlowers(response.data.items);
+      } catch (err) {
+        setError("Failed to fetch flowers. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFlowers();
+  }, []);
 
   useEffect(() => {
     if (showLoginModal || showRegisterModal || showViewUserModal) {
@@ -94,7 +49,15 @@ export default function Home() {
         onOpenViewModal={() => setShowViewUserModal(true)}
       />
       <HeroSection />
-      <FlowersGrid flowers={flowers}></FlowersGrid>
+      {loading ? (
+        <div className="text-center text-gray-500 text-lg mt-10">
+          Loading flowers...
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500 text-lg mt-10">{error}</div>
+      ) : (
+        <FlowersGrid flowers={flowers} />
+      )}
       {showLoginModal && (
         <LoginModal closeModal={() => setShowLoginModal(false)} />
       )}
