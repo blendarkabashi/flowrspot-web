@@ -6,7 +6,7 @@ interface SearchInputProps {
 
 const SearchInput: React.FC<SearchInputProps> = ({ placeholder }) => {
   return (
-    <div className="flex items-center bg-[#F5F5F5] rounded-[5px] p-[20px] min-w-[600px]">
+    <div className="flex items-center bg-[#F5F5F5] rounded-[5px] p-[20px] w-full">
       <input
         type="text"
         placeholder={placeholder}

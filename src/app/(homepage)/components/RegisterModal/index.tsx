@@ -8,6 +8,7 @@ import api from "@/lib/axiosInstance";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/slices/authSlice";
 import axiosInstance from "@/lib/axiosInstance";
+import toast from "react-hot-toast";
 
 interface RegisterModalProps {
   closeModal: () => void;
@@ -41,6 +42,10 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
           Authorization: `Bearer ${response.data.accessToken}`,
         },
       });
+
+      toast.success(
+        `Welcome ${userResponse.data.firstName}! You have successfully registered, and are now signed in to FlowrSpot!`
+      );
 
       dispatch(login({ user: userResponse.data }));
       closeModal();

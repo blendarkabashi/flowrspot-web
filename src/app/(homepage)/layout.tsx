@@ -1,6 +1,7 @@
 import { Montserrat, Ubuntu } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/store/ReduxProvider";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Next.js",
@@ -28,7 +29,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${ubuntu.variable}`}>
       <ReduxProvider>
-        <body className="">{children}</body>
+        <body className="">
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                fontSize: "12px",
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            }}
+          />
+        </body>
       </ReduxProvider>
     </html>
   );

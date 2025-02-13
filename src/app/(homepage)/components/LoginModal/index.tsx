@@ -7,6 +7,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { login } from "@/store/slices/authSlice";
 import { AppDispatch } from "@/store/store";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
 interface LoginModalProps {
@@ -37,10 +38,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
       });
 
       dispatch(login({ user: userResponse.data }));
-      console.log("Login Successful:", userResponse.data);
+      toast.success(
+        `Welcome ${userResponse.data.firstName}! You are now signed in to FlowrSpot!`
+      );
       closeModal();
     } catch (err: any) {
-      console.error("Login Failed:", err);
+      toast.error("Login Failed:", err);
 
       if (err.response?.data?.code === "validation-exception") {
         const validationErrors = Object.values(err.response.data.meta)

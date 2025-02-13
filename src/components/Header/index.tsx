@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center justify-between">
           <Image src="/images/logo.svg" alt="Logo" width={170} height={30} />
 
-          <ul className="list-none flex items-center space-x-[45px] text-[#949EA0] text-[14px]">
+          <ul className="hidden md:flex list-none items-center space-x-[30px] xl:space-x-[45px] text-[#949EA0] text-[12px] xl:text-[14px]">
             <li>
               <a href="#">Flowers</a>
             </li>
@@ -57,8 +57,11 @@ const Header: React.FC<HeaderProps> = ({
               <a href="#">Favorites</a>
             </li>
             {user ? (
-              <div className="flex items-center cursor-pointer">
-                <div onClick={onOpenViewModal}>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={onOpenViewModal}
+              >
+                <div>
                   {user.firstName} {user.lastName}
                 </div>
                 <img
@@ -78,6 +81,7 @@ const Header: React.FC<HeaderProps> = ({
               </>
             )}
           </ul>
+          <img className="block md:hidden" src={"/images/hamburger.svg"}></img>
         </div>
       </Container>
     </div>
